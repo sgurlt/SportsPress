@@ -97,4 +97,32 @@ class SP_Staff extends SP_Custom_Post {
 			),
 		) );
 	}
+	
+	/**
+	 * Returns formatted data
+	 *
+	 * @access public
+	 * @param int $league_id
+	 * @param bool $admin
+	 * @return array
+	 */
+	 
+	 public function data( $league_id, $admin = false ) {
+		
+		$seasons = (array) $this->get_terms_sorted_by_sp_order( 'sp_season' );
+		$metrics = (array)get_post_meta( $this->ID, 'sp_metrics', true );
+		$stats = (array)get_post_meta( $this->ID, 'sp_statistics', true );
+		$leagues = (array) sp_array_value( (array)get_post_meta( $this->ID, 'sp_leagues', true ), $league_id );
+		uksort( $leagues, 'sp_sort_terms' );
+		$manual_columns = 'manual' == get_option( 'sportspress_player_columns', 'auto' ) ? true : false;
+
+		$season_ids = array_filter(wp_list_pluck( $seasons, 'term_id' ));
+		$season_order = array_flip( $season_ids );
+		foreach ( $season_order as $season_id => $val ) {
+			$season_order[ $season_id ] = null;
+		}
+
+		$leagues = array_replace( $season_order, $leagues );
+		
+	 }
 }
