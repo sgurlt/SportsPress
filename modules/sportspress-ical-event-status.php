@@ -46,7 +46,7 @@ class SportsPress_Ical_Event_Status {
 	}
 
 	/**
-	 * Add option to SportsPress General Settings.
+	 * Add the event status to the summary field if not On Time.
 	 */
 	public function add_event_status( $summary, $event ) {
 		// Get event status 
