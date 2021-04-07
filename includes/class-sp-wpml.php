@@ -30,6 +30,7 @@ class SP_WPML {
 		add_filter( 'the_title', array( $this, 'the_title' ), 5, 2 );
 		add_filter( 'post_type_link', array( $this, 'post_type_link' ), 5, 3 );
 		add_filter( 'icl_ls_languages', array( $this, 'ls' ) );
+		add_filter( 'translatable_object_id', array( $this, 'translatable_object_id' ), 5, 2 );
 	}
 
 	public function init() {
@@ -125,6 +126,12 @@ class SP_WPML {
 
 	public static function can_localize( $post, $id = null ) {
 		return function_exists( 'icl_object_id' ) && is_sp_post_type( get_post_type( $post ) );
+	}
+	
+	public static function translatable_object_id( $object_id = null, $post_type = 'post' ) {
+		$object_id = apply_filters( 'wpml_object_id', $object_id, $post_type, true );
+
+		return $object_id;
 	}
 }
 
