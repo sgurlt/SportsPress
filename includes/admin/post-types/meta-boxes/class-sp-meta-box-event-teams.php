@@ -35,7 +35,7 @@ class SP_Meta_Box_Event_Teams {
 						'class' => 'sportspress-pages',
 						'show_option_none' => __( '&mdash; None &mdash;', 'sportspress' ),
 						'values' => 'ID',
-						'selected' => $team,
+						'selected' => apply_filters( 'translatable_object_id', $team, $post_type ),
 						'chosen' => true,
 						'tax_query' => array(),
 					);
