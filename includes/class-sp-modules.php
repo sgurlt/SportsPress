@@ -113,6 +113,12 @@ class SP_Modules {
 					'link' => 'https://www.themeboy.com/sportspress-extensions/team-access/',
 					'desc' => __( 'Limit user access to data that is related to their team.', 'sportspress' ),
 				),
+				'trophies' => array(
+					'label' => __( 'Trophies', 'sportspress' ),
+					'class' => 'SportsPress_Trophies',
+					'icon' => 'sp-icon-tournament',
+					'desc' => __( 'Add trophy details to clubs.', 'sportspress' ),
+				),
 			),
 			'player_staff' => array(
 				'player_lists' => array(
