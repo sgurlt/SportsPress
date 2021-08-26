@@ -19,22 +19,6 @@ class SP_Meta_Box_Trophy_Statistics {
 	 * Output the metabox
 	 */
 	public static function output( $post ) {
-		self::table( $post->ID );
-	}
-
-	/**
-	 * Save meta box data
-	 */
-	public static function save( $post_id, $post ) {
-		var_dump($_POST);
-		update_post_meta( $post_id, 'sp_trophies', sp_array_value( $_POST, 'sp_trophies', array() ) );
-		//update_post_meta( $post_id, 'sp_statistics', sp_array_value( $_POST, 'sp_statistics', array() ) );
-	}
-
-	/**
-	 * Admin edit table
-	 */
-	public static function table( $id = null ) {
 		$seasons = get_terms( array(
 			'taxonomy' => 'sp_season',
 			'hide_empty' => false,
@@ -52,10 +36,25 @@ class SP_Meta_Box_Trophy_Statistics {
 							),
 			'order' => 'DESC',
 		) );
-		$trophies = array_filter( get_post_meta( $id, 'sp_trophies', false ) );
-		var_dump($seasons);
-		var_dump($trophies);
+		$trophies = array_filter( get_post_meta( $post->ID, 'sp_trophies', false ) );
+		
+		self::table( $post->ID, $seasons, $trophies );
+	}
+
+	/**
+	 * Save meta box data
+	 */
+	public static function save( $post_id ) {
 		var_dump($_POST);
+		update_post_meta( $post_id, 'sp_trophies', sp_array_value( $_POST, 'sp_trophies', array() ) );
+	}
+
+	/**
+	 * Admin edit table
+	 */
+	public static function table( $id = null, $seasons = array(), $trophies = array() ) {
+		//var_dump($seasons);
+		var_dump($trophies);
 		?>
 		<div class="sp-data-table-container">
 			<table class="widefat sp-data-table sp-trophies-statistics-table">
@@ -93,7 +92,7 @@ class SP_Meta_Box_Trophy_Statistics {
 						if ( ! sp_dropdown_pages( $args ) ):
 							_e( '&mdash; None &mdash;', 'sportspress' );
 						endif;
-						?>
+					?>
 					</td>
 					<td>N/A</td>
 					<td>N/A</td>
