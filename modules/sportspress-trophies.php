@@ -34,6 +34,7 @@ class SportsPress_Trophies {
 
 		// Filters
 		add_filter( 'sportspress_post_types', array( $this, 'add_post_type' ) );
+		add_filter( 'sportspress_meta_boxes', array( $this, 'add_meta_boxes' ) );
 	}
 
 	/**
@@ -95,6 +96,24 @@ class SportsPress_Trophies {
 	public static function add_post_type( $post_types = array() ) {
 		$post_types[] = 'sp_trophy';
 		return $post_types;
+	}
+	
+	/**
+	 * Add meta boxes to trophies.
+	 *
+	 * @return array
+	 */
+	public function add_meta_boxes( $meta_boxes ) {
+		$meta_boxes['sp_trophy'] = array(
+			'stats' => array(
+				'title' => __( 'Statistics', 'sportspress' ),
+				'save' => 'SP_Meta_Box_Trophy_Statistics::save',
+				'output' => 'SP_Meta_Box_Trophy_Statistics::output',
+				'context' => 'normal',
+				'priority' => 'high',
+			),
+		);
+		return $meta_boxes;
 	}
 }
 
