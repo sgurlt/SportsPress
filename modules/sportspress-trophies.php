@@ -42,7 +42,7 @@ class SportsPress_Trophies {
 	*/
 	private function define_constants() {
 		if ( !defined( 'SP_TROPHIES_VERSION' ) )
-			define( 'SP_TROPHIES_VERSION', '2.6.15' );
+			define( 'SP_TROPHIES_VERSION', '2.8.0' );
 
 		if ( !defined( 'SP_TROPHIES_URL' ) )
 			define( 'SP_TROPHIES_URL', plugin_dir_url( __FILE__ ) );
