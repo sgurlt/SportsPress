@@ -483,6 +483,22 @@ if ( ! function_exists( 'sportspress_output_staff_details' ) ) {
 	}
 }
 
+/** Single Trophy ********************************************************/
+
+if ( ! function_exists( 'sportspress_output_trophy_data' ) ) {
+
+	/**
+	 * Output the trophy data.
+	 *
+	 * @access public
+	 * @subpackage	Trophy/Data
+	 * @return void
+	 */
+	function sportspress_output_trophy_data() {
+		sp_get_template( 'trophy-data.php' );
+	}
+}
+
 /** Venue Archive ********************************************************/
 
 function sportspress_output_venue_map( $query ) {

@@ -278,6 +278,27 @@ class SP_Templates {
 				
 				apply_filters( 'sportspress_after_staff_template', array() )
 			),
+			'trophy' => array_merge(
+				apply_filters( 'sportspress_before_trophy_template', array() ),
+				
+				array(
+					'content' => array(
+						'title' => __( 'Description', 'sportspress' ),
+						'option' => 'sportspress_trophy_show_content',
+						'action' => 'sportspress_output_trophy_content',
+						'default' => 'yes',
+					),
+				),
+				
+				apply_filters( 'sportspress_after_trophy_template', array(
+					'data' => array(
+						'title' => __( 'Trophy', 'sportspress' ),
+						'option' => 'sportspress_trophy_show_data',
+						'action' => 'sportspress_output_trophy_data',
+						'default' => 'yes',
+					),
+				) )
+			),
 		);
 	}
 
