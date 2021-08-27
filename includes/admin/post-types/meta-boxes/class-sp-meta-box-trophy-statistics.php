@@ -19,6 +19,7 @@ class SP_Meta_Box_Trophy_Statistics {
 	 * Output the metabox
 	 */
 	public static function output( $post ) {
+		wp_nonce_field( 'sportspress_save_data', 'sportspress_meta_nonce' );
 		$seasons = get_terms( array(
 			'taxonomy' => 'sp_season',
 			'hide_empty' => false,
@@ -45,7 +46,6 @@ class SP_Meta_Box_Trophy_Statistics {
 	 * Save meta box data
 	 */
 	public static function save( $post_id, $post ) {
-		var_dump($_POST);
 		update_post_meta( $post_id, 'sp_trophies', sp_array_value( $_POST, 'sp_trophies', array() ) );
 	}
 
