@@ -30,6 +30,7 @@ class SportsPress_Trophies {
 
 		// Actions
 		add_action( 'init', array( $this, 'register_post_type' ) );
+		add_action( 'sportspress_include_post_type_handlers', array( $this, 'include_post_type_handler' ) );
 
 
 		// Filters
@@ -100,6 +101,13 @@ class SportsPress_Trophies {
 	public static function add_post_type( $post_types = array() ) {
 		$post_types[] = 'sp_trophy';
 		return $post_types;
+	}
+	
+	/**
+	 * Conditonally load the class and functions only needed when viewing this post type.
+	 */
+	public function include_post_type_handler() {
+		include_once( SP()->plugin_path() . '/includes/admin/post-types/class-sp-admin-cpt-trophy.php' );
 	}
 	
 	/**
