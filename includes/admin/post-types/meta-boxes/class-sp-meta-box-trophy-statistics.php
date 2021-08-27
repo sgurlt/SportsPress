@@ -44,7 +44,7 @@ class SP_Meta_Box_Trophy_Statistics {
 	/**
 	 * Save meta box data
 	 */
-	public static function save( $post_id ) {
+	public static function save( $post_id, $post ) {
 		var_dump($_POST);
 		update_post_meta( $post_id, 'sp_trophies', sp_array_value( $_POST, 'sp_trophies', array() ) );
 	}
@@ -54,9 +54,9 @@ class SP_Meta_Box_Trophy_Statistics {
 	 */
 	public static function table( $id = null, $seasons = array(), $trophies = array() ) {
 		//var_dump($seasons);
-		var_dump($trophies);
+		//var_dump($trophies);
 		?>
-		<div class="sp-data-table-container">
+		<div class="sp-data-table-container sp-table-values" id="sp-table-values">
 			<table class="widefat sp-data-table sp-trophies-statistics-table">
 				<thead>
 					<tr>
@@ -78,7 +78,7 @@ class SP_Meta_Box_Trophy_Statistics {
 						</label>
 					</td>
 					<td>
-					<?php $value = sp_array_value( $trophies, $season->term_id, '-1' ); ?>
+					<?php //$value = sp_array_value( $trophies, $season->term_id, '-1' ); ?>
 					<?php
 						$args = array(
 							'post_type' => 'sp_team',
@@ -87,15 +87,59 @@ class SP_Meta_Box_Trophy_Statistics {
 							'sort_order'   => 'ASC',
 							'sort_column'  => 'menu_order',
 							'values' => 'ID',
-							'selected' => $value,
+							//'selected' => $value,
 						);
 						if ( ! sp_dropdown_pages( $args ) ):
 							_e( '&mdash; None &mdash;', 'sportspress' );
 						endif;
 					?>
 					</td>
-					<td>N/A</td>
-					<td>N/A</td>
+					<td>
+					<?php //$value = sp_array_value( $trophies, $season->term_id, '-1' ); ?>
+					<?php
+						$args = array(
+							'post_type' => 'sp_table',
+							'name' => 'sp_trophies[table]',
+							'show_option_none' => __( '&mdash; None &mdash;', 'sportspress' ),
+							'sort_order'   => 'ASC',
+							'sort_column'  => 'menu_order',
+							'values' => 'ID',
+							//'selected' => $value,
+							'tax_query' => array(
+												array(
+													'taxonomy' => 'sp_season',
+													'terms'    => $season->term_id,
+												),
+											),
+						);
+						if ( ! sp_dropdown_pages( $args ) ):
+							_e( '&mdash; None &mdash;', 'sportspress' );
+						endif;
+					?>
+					</td>
+					<td>
+					<?php //$value = sp_array_value( $trophies, $season->term_id, '-1' ); ?>
+					<?php
+						$args = array(
+							'post_type' => 'sp_calendar',
+							'name' => 'sp_trophies[calendar]',
+							'show_option_none' => __( '&mdash; None &mdash;', 'sportspress' ),
+							'sort_order'   => 'ASC',
+							'sort_column'  => 'menu_order',
+							'values' => 'ID',
+							//'selected' => $value,
+							'tax_query' => array(
+												array(
+													'taxonomy' => 'sp_season',
+													'terms'    => $season->term_id,
+												),
+											),
+						);
+						if ( ! sp_dropdown_pages( $args ) ):
+							_e( '&mdash; None &mdash;', 'sportspress' );
+						endif;
+					?>
+					</td>
 					</tr>
 				<?php
 				$i++;
