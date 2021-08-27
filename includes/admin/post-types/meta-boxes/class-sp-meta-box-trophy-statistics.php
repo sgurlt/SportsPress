@@ -50,9 +50,9 @@ class SP_Meta_Box_Trophy_Statistics {
 		$winners_perseason = sp_array_value( $_POST, 'sp_trophies', array() );
 		$teams = array();
 		$winners = array();
-		foreach ( $winners_perseason as $season ) {
+		foreach( $winners_perseason as $season_id => $season ) {
 			$teams[] = $season['team'];
-			$winners[ $season['team'] ][] = $season['season'];
+			$winners[ $season['team'] ][] = $season_id;
 		}
 		$teams = array_filter( $teams );
 		$teams = array_unique( $teams );
@@ -86,7 +86,7 @@ class SP_Meta_Box_Trophy_Statistics {
 					<tr class="sp-row sp-post<?php if ( $i % 2 == 0 ) echo ' alternate'; ?> ">
 					<td>
 						<label>
-							<input type="hidden" name="sp_trophies[<?php echo $season->term_id; ?>][season]" value="<?php echo $season->term_id; ?>">
+							<input type="hidden" name="sp_trophies[<?php echo $season->term_id; ?>][season]" value="<?php echo $season->name; ?>">
 							<?php echo $season->name; ?>
 						</label>
 					</td>
