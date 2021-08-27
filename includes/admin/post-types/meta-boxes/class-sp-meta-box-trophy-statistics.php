@@ -37,7 +37,7 @@ class SP_Meta_Box_Trophy_Statistics {
 							),
 			'order' => 'DESC',
 		) );
-		$trophies = array_filter( get_post_meta( $post->ID, 'sp_trophies', false ) );
+		$trophies = array_filter( get_post_meta( $post->ID, 'sp_trophies', true ) );
 		
 		self::table( $post->ID, $seasons, $trophies );
 	}
@@ -73,21 +73,21 @@ class SP_Meta_Box_Trophy_Statistics {
 					<tr class="sp-row sp-post<?php if ( $i % 2 == 0 ) echo ' alternate'; ?> ">
 					<td>
 						<label>
-							<input type="hidden" name="sp_trophies[season]" value="<?php echo $season->term_id; ?>">
+							<input type="hidden" name="sp_trophies[<?php echo $season->term_id; ?>][season]" value="<?php echo $season->term_id; ?>">
 							<?php echo $season->name; ?>
 						</label>
 					</td>
 					<td>
-					<?php //$value = sp_array_value( $trophies, $season->term_id, '-1' ); ?>
+					<?php $selected_team = sp_array_value( $trophies[$season->term_id], 'team', '-1' ); ?>
 					<?php
 						$args = array(
 							'post_type' => 'sp_team',
-							'name' => 'sp_trophies[team]',
+							'name' => 'sp_trophies[' . $season->term_id . '][team]',
 							'show_option_none' => __( '&mdash; None &mdash;', 'sportspress' ),
 							'sort_order'   => 'ASC',
 							'sort_column'  => 'menu_order',
 							'values' => 'ID',
-							//'selected' => $value,
+							'selected' => $selected_team,
 						);
 						if ( ! sp_dropdown_pages( $args ) ):
 							_e( '&mdash; None &mdash;', 'sportspress' );
@@ -95,16 +95,16 @@ class SP_Meta_Box_Trophy_Statistics {
 					?>
 					</td>
 					<td>
-					<?php //$value = sp_array_value( $trophies, $season->term_id, '-1' ); ?>
+					<?php $selected_table = sp_array_value( $trophies[$season->term_id], 'table', '-1' ); ?>
 					<?php
 						$args = array(
 							'post_type' => 'sp_table',
-							'name' => 'sp_trophies[table]',
+							'name' => 'sp_trophies[' . $season->term_id . '][table]',
 							'show_option_none' => __( '&mdash; None &mdash;', 'sportspress' ),
 							'sort_order'   => 'ASC',
 							'sort_column'  => 'menu_order',
 							'values' => 'ID',
-							//'selected' => $value,
+							'selected' => $selected_table,
 							'tax_query' => array(
 												array(
 													'taxonomy' => 'sp_season',
@@ -118,16 +118,16 @@ class SP_Meta_Box_Trophy_Statistics {
 					?>
 					</td>
 					<td>
-					<?php //$value = sp_array_value( $trophies, $season->term_id, '-1' ); ?>
+					<?php $selected_calendar = sp_array_value( $trophies[$season->term_id], 'calendar', '-1' ); ?>
 					<?php
 						$args = array(
 							'post_type' => 'sp_calendar',
-							'name' => 'sp_trophies[calendar]',
+							'name' => 'sp_trophies[' . $season->term_id . '][calendar]',
 							'show_option_none' => __( '&mdash; None &mdash;', 'sportspress' ),
 							'sort_order'   => 'ASC',
 							'sort_column'  => 'menu_order',
 							'values' => 'ID',
-							//'selected' => $value,
+							'selected' => $selected_calendar,
 							'tax_query' => array(
 												array(
 													'taxonomy' => 'sp_season',
