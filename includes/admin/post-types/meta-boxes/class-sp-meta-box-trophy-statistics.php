@@ -51,8 +51,8 @@ class SP_Meta_Box_Trophy_Statistics {
 		$teams = array();
 		$winners = array();
 		foreach( $winners_perseason as $season_id => $season ) {
-			$teams[] = $season['team'];
-			$winners[ $season['team'] ][] = $season_id;
+			$teams[] = $season['team_id'];
+			$winners[ $season['team_id'] ][] = $season_id;
 		}
 		$teams = array_filter( $teams );
 		$teams = array_unique( $teams );
@@ -93,11 +93,11 @@ class SP_Meta_Box_Trophy_Statistics {
 					<td>
 					<?php 
 					if ( isset( $winners_perseason[$season->term_id] ) )
-						$selected_team = sp_array_value( $winners_perseason[$season->term_id], 'team', '-1' ); ?>
+						$selected_team = sp_array_value( $winners_perseason[$season->term_id], 'team_id', '-1' ); ?>
 					<?php
 						$args = array(
 							'post_type' => 'sp_team',
-							'name' => 'sp_trophies[' . $season->term_id . '][team]',
+							'name' => 'sp_trophies[' . $season->term_id . '][team_id]',
 							'show_option_none' => __( '&mdash; None &mdash;', 'sportspress' ),
 							'option_none_value' => false,
 							'sort_order'   => 'ASC',
@@ -113,11 +113,11 @@ class SP_Meta_Box_Trophy_Statistics {
 					<td>
 					<?php 
 					if ( isset( $winners_perseason[$season->term_id] ) )
-						$selected_table = sp_array_value( $winners_perseason[$season->term_id], 'table', '-1' ); ?>
+						$selected_table = sp_array_value( $winners_perseason[$season->term_id], 'table_id', '-1' ); ?>
 					<?php
 						$args = array(
 							'post_type' => 'sp_table',
-							'name' => 'sp_trophies[' . $season->term_id . '][table]',
+							'name' => 'sp_trophies[' . $season->term_id . '][table_id]',
 							'show_option_none' => __( '&mdash; None &mdash;', 'sportspress' ),
 							'sort_order'   => 'ASC',
 							'sort_column'  => 'menu_order',
@@ -138,11 +138,11 @@ class SP_Meta_Box_Trophy_Statistics {
 					<td>
 					<?php 
 					if ( isset( $winners_perseason[$season->term_id] ) )
-						$selected_calendar = sp_array_value( $winners_perseason[$season->term_id], 'calendar', '-1' ); ?>
+						$selected_calendar = sp_array_value( $winners_perseason[$season->term_id], 'calendar_id', '-1' ); ?>
 					<?php
 						$args = array(
 							'post_type' => 'sp_calendar',
-							'name' => 'sp_trophies[' . $season->term_id . '][calendar]',
+							'name' => 'sp_trophies[' . $season->term_id . '][calendar_id]',
 							'show_option_none' => __( '&mdash; None &mdash;', 'sportspress' ),
 							'sort_order'   => 'ASC',
 							'sort_column'  => 'menu_order',
