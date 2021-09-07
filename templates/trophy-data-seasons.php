@@ -39,7 +39,13 @@ foreach( $trophy_data as $season_id => $trophy ) {
 		$calendar_permalink = get_permalink( $trophy['calendar_id'] );
 		$season = '<a href="' . $calendar_permalink . '">' . $season . '</a>';
 	}
-	if ( get_option( 'sportspress_link_teams', 'no' ) == 'yes' ? true : false ) {
+	if ( $show_team_logo ){
+		if ( has_post_thumbnail( $trophy['team_id'] ) ) {
+			$logo = get_the_post_thumbnail( $trophy['team_id'], 'sportspress-fit-icon' );
+			$team = '<span class="team-logo">' . $logo . '</span>' . $team;
+		}
+	}
+	if ( $link_teams ) {
 		$team_permalink = get_permalink( $trophy['team_id'] );
 		$team = '<a href="' . $team_permalink . '">' . $team . '</a>';
 	}

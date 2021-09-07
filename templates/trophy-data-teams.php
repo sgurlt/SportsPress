@@ -33,6 +33,7 @@ $output .= '<th>' . __( 'Seasons', 'sportspress' ) . '</th>';
 $output .= '</tr>' . '</thead>' . '<tbody>';
 
 foreach( $trophy_data as $team_id => $seasons ) {
+	$logo = null;
 	$team = sp_team_short_name( $team_id );
 	$winnings = array();
 	if ( $order === 'asc' )
@@ -48,8 +49,14 @@ foreach( $trophy_data as $team_id => $seasons ) {
 		}
 		$winnings[] = $winning;
 	}
-	if ( get_option( 'sportspress_link_teams', 'no' ) == 'yes' ? true : false ) {
-		$team_permalink = get_permalink( $trophy['team_id'] );
+	if ( $show_team_logo ){
+		if ( has_post_thumbnail( $team_id ) ) {
+			$logo = get_the_post_thumbnail( $team_id, 'sportspress-fit-icon' );
+			$team = '<span class="team-logo">' . $logo . '</span>' . $team;
+		}
+	}
+	if ( $link_teams ) {
+		$team_permalink = get_permalink( $team_id );
 		$team = '<a href="' . $team_permalink . '">' . $team . '</a>';
 	}
 	$winnings = implode( ', ', $winnings );
