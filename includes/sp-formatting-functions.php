@@ -108,6 +108,19 @@ function sp_sort_by_name( $a, $b ) {
 }
 
 /**
+ * Sort array by counting subarray fields.
+ *
+ * @access public
+ * @param array $array
+ * @return bool
+ */
+function sp_sort_by_count( $a, $b ) {
+	$a = count( $a );
+	$b = count( $b );
+	return ( $a == $b ) ? 0 : ( ( $a < $b ) ? 1 : - 1 );
+}
+
+/**
  * let_to_num function.
  *
  * This function transforms the php.ini notation for numbers (like '2M') to an integer.
