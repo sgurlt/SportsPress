@@ -331,6 +331,20 @@ if ( ! function_exists( 'sportspress_output_team_events' ) ) {
 	}
 }
 
+if ( ! function_exists( 'sportspress_output_team_trophies' ) ) {
+
+	/**
+	 * Output the team trophies.
+	 *
+	 * @access public
+	 * @subpackage	Team/Trophies
+	 * @return void
+	 */
+	function sportspress_output_team_trophies() {
+		sp_get_template( 'team-trophies.php' );
+	}
+}
+
 /** Single League Table ********************************************************/
 
 if ( ! function_exists( 'sportspress_output_league_table' ) ) {

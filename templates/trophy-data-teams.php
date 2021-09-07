@@ -33,9 +33,10 @@ $output .= '<th>' . __( 'Seasons', 'sportspress' ) . '</th>';
 $output .= '</tr>' . '</thead>' . '<tbody>';
 
 foreach( $trophy_data as $team_id => $seasons ) {
-	//$season = $trophy['season'];
 	$team = sp_team_short_name( $team_id );
 	$winnings = array();
+	if ( $order === 'asc' )
+		$seasons = array_reverse( $seasons );
 	foreach ( $seasons as $season ) {
 		$winning = $season['season_name'];
 		if ( isset( $season['table_id'] ) && $season['table_id'] != -1 ) {

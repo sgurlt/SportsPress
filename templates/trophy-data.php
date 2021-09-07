@@ -23,17 +23,16 @@ $defaults = array(
 
 extract( $defaults, EXTR_SKIP );
 
-$format = get_option( 'sportspress_trophy_format', 'desc' );
+$layout = get_option( 'sportspress_trophy_format', 'seasons' );
+$order = get_option( 'sportspress_trophy_order', 'desc' );
 
-if ( $format === 'teams' ) {
-	$layout = 'teams';
+if ( $layout === 'teams' ) {
 	$trophy_data = get_post_meta( $id, 'sp_winners', true );
 	uasort( $trophy_data, 'sp_sort_by_count' );
 }else{
-	$layout = 'seasons';
 	//Get all the winners of the specific trophy
 	$trophy_data = get_post_meta( $id, 'sp_trophies', true );
-	if ( $format === 'asc' )
+	if ( $order === 'asc' )
 		$trophy_data = array_reverse( $trophy_data );
 }
 
@@ -48,4 +47,5 @@ sp_get_template( 'trophy-data-' . $layout . '.php', array(
 	'paginated' => $paginated,
 	'rows' => $rows,
 	'trophy_data' => $trophy_data,
+	'order' => $order,
 ) );

@@ -37,6 +37,7 @@ class SportsPress_Trophies {
 		add_filter( 'sportspress_post_types', array( $this, 'add_post_type' ) );
 		add_filter( 'sportspress_meta_boxes', array( $this, 'add_meta_boxes' ) );
 		add_filter( 'sportspress_team_settings', array( $this, 'add_settings' ) );
+		add_filter( 'sportspress_team_templates', array( $this, 'add_team_template' ) );
 	}
 
 	/**
@@ -186,14 +187,24 @@ class SportsPress_Trophies {
 				),
 				
 				array(
+					'title'     => __( 'Seasons Order', 'sportspress' ),
+					'id'        => 'sportspress_trophy_order',
+					'default'   => 'desc',
+					'type'      => 'select',
+					'options'   => array(
+						'desc'  => __( 'DESC', 'sportspress' ),
+						'asc'   => __( 'ASC', 'sportspress' ),
+					),
+				),
+				
+				array(
 					'title' 	=> __( 'Template Format', 'sportspress' ),
 					'id' 		=> 'sportspress_trophy_format',
-					'default'	=> 0,
+					'default'	=> 'seasons',
 					'type' 		=> 'radio',
-					'options' => array(
-						'desc'	  => __( 'Seasons list (DESC)', 'sportspress' ),
-						'asc'	  => __( 'Seasons list (ASC)', 'sportspress' ),
-						'teams'	  => __( 'Teams list', 'sportspress' ),
+					'options'   => array(
+						'seasons'	  => __( 'Seasons list', 'sportspress' ),
+						'teams'		  => __( 'Teams list', 'sportspress' ),
 					),
 				),
 
@@ -203,6 +214,23 @@ class SportsPress_Trophies {
 				array( 'type' => 'sectionend', 'id' => 'table_options' ),
 			)
 		);
+	}
+	
+	/**
+	 * Add team template.
+	 *
+	 * @return array
+	 */
+	public function add_team_template( $templates ) {
+		return array_merge( $templates, array(
+			'trophies' => array(
+				'title' => __( 'Trophies', 'sportspress' ),
+				'label' => __( 'Trophies', 'sportspress' ),
+				'option' => 'sportspress_team_show_trophies',
+				'action' => 'sportspress_output_team_trophies',
+				'default' => 'no',
+			),
+		) );
 	}
 }
 
