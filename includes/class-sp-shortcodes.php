@@ -36,6 +36,7 @@ class SP_Shortcodes {
 			'team_gallery'      => __CLASS__ . '::team_gallery',
 			'player_list'       => __CLASS__ . '::player_list',
 			'player_gallery'    => __CLASS__ . '::player_gallery',
+			'team_trophies'     => __CLASS__ . '::trophy',
 		);
 
 		foreach ( $shortcodes as $shortcode => $function ) {
@@ -291,5 +292,16 @@ class SP_Shortcodes {
 	 */
 	public static function staff_profile( $atts ) {
 		return self::shortcode_wrapper( array( 'SP_Shortcode_Staff_Profile', 'output' ), $atts );
+	}
+	
+	/**
+	 * Trophy shortcode.
+	 *
+	 * @access public
+	 * @param mixed $atts
+	 * @return string
+	 */
+	public static function trophy( $atts ) {
+		return self::shortcode_wrapper( array( 'SP_Shortcode_Trophy', 'output' ), $atts );
 	}
 }

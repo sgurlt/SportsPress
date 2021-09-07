@@ -125,6 +125,13 @@ class SportsPress_Trophies {
 				'context' => 'normal',
 				'priority' => 'high',
 			),
+			'shortcode' => array(
+				'title' => __( 'Shortcode', 'sportspress' ),
+				'save' => 'SP_Meta_Box_Trophy_Shortcode::save',
+				'output' => 'SP_Meta_Box_Trophy_Shortcode::output',
+				'context' => 'side',
+				'priority' => 'default',
+			),
 		);
 		return $meta_boxes;
 	}
