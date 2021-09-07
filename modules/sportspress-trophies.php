@@ -36,6 +36,7 @@ class SportsPress_Trophies {
 		// Filters
 		add_filter( 'sportspress_post_types', array( $this, 'add_post_type' ) );
 		add_filter( 'sportspress_meta_boxes', array( $this, 'add_meta_boxes' ) );
+		add_filter( 'sportspress_team_settings', array( $this, 'add_settings' ) );
 	}
 
 	/**
@@ -126,6 +127,75 @@ class SportsPress_Trophies {
 			),
 		);
 		return $meta_boxes;
+	}
+	
+	/**
+	 * Add settings.
+	 *
+	 * @return array
+	 */
+	public function add_settings( $settings ) {
+		return array_merge( $settings,
+			array(
+				array( 'title' => __( 'Trophies', 'sportspress' ), 'type' => 'title', 'id' => 'trophy_options' ),
+			),
+
+			apply_filters( 'sportspress_trophy_options', array(
+				array(
+					'title'     => __( 'Title', 'sportspress' ),
+					'desc' 		=> __( 'Display title', 'sportspress' ),
+					'id' 		=> 'sportspress_trophy_show_title',
+					'default'	=> 'yes',
+					'type' 		=> 'checkbox',
+				),
+
+				array(
+					'title'     => __( 'Teams', 'sportspress' ),
+					'desc' 		=> __( 'Display logos', 'sportspress' ),
+					'id' 		=> 'sportspress_trophy_show_logos',
+					'default'	=> 'yes',
+					'type' 		=> 'checkbox',
+				),
+
+				array(
+					'title'     => __( 'Pagination', 'sportspress' ),
+					'desc' 		=> __( 'Paginate', 'sportspress' ),
+					'id' 		=> 'sportspress_trophy_paginated',
+					'default'	=> 'yes',
+					'type' 		=> 'checkbox',
+				),
+				
+				array(
+					'title' 	=> __( 'Limit', 'sportspress' ),
+					'id' 		=> 'sportspress_trophy_rows',
+					'class' 	=> 'small-text',
+					'default'	=> '10',
+					'desc' 		=> __( 'seasons', 'sportspress' ),
+					'type' 		=> 'number',
+					'custom_attributes' => array(
+						'min' 	=> 1,
+						'step' 	=> 1
+					),
+				),
+				
+				array(
+					'title' 	=> __( 'Template Format', 'sportspress' ),
+					'id' 		=> 'sportspress_trophy_format',
+					'default'	=> 0,
+					'type' 		=> 'radio',
+					'options' => array(
+						0	  => __( 'Seasons list (DESC)', 'sportspress' ),
+						1	  => __( 'Seasons list (ASC)', 'sportspress' ),
+						2	  => __( 'Teams list', 'sportspress' ),
+					),
+				),
+
+			) ),
+
+			array(
+				array( 'type' => 'sectionend', 'id' => 'table_options' ),
+			)
+		);
 	}
 }
 
