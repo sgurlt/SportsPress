@@ -23,51 +23,29 @@ $defaults = array(
 
 extract( $defaults, EXTR_SKIP );
 
-if ( $show_title && false === $title && $id )
-	$title = __( 'Winners of ', 'sportspress' ) . get_the_title( $id );
+$format = get_option( 'sportspress_trophy_format', 'desc' );
 
-//Get all the winners of the specific trophy
-$trophy_data = get_post_meta( $id, 'sp_trophies', true );
-
-//Create a unique identifier based on the current time in microseconds
-$identifier = uniqid( 'table_' );
-
-$output = '';
-
-if ( $title )
-	$output .= '<h4 class="sp-table-caption">' . $title . '</h4>';
-
-$output .= '<div class="sp-table-wrapper">';
-
-$output .= '<table class="sp-trophy-data sp-data-table' . ( $sortable ? ' sp-sortable-table' : '' ) . ( $responsive ? ' sp-responsive-table '.$identifier : '' ). ( $scrollable ? ' sp-scrollable-table' : '' ) . ( $paginated ? ' sp-paginated-table' : '' ) . '" data-sp-rows="' . $rows . '">' . '<thead>' . '<tr>';
-
-$output .= '<th>' . __( 'Season', 'sportspress' ) . '</th>';
-$output .= '<th>' . __( 'Winner', 'sportspress' ) . '</th>';
-
-$output .= '</tr>' . '</thead>' . '<tbody>';
-
-foreach( $trophy_data as $season_id => $trophy ) {
-	$season = $trophy['season'];
-	$team = sp_team_short_name( $trophy['team_id'] );
-	if ( isset( $trophy['table_id'] ) && $trophy['table_id'] != -1 ) {
-		$league_table_permalink = get_permalink( $trophy['table_id'] );
-		$season = '<a href="' . $league_table_permalink . '">' . $season . '</a>';
-	}elseif ( isset( $trophy['calendar_id'] ) && $trophy['calendar_id'] != -1 ) {
-		$calendar_permalink = get_permalink( $trophy['calendar_id'] );
-		$season = '<a href="' . $calendar_permalink . '">' . $season . '</a>';
-	}
-	if ( get_option( 'sportspress_link_teams', 'no' ) == 'yes' ? true : false ) {
-		$team_permalink = get_permalink( $trophy['team_id'] );
-		$team = '<a href="' . $team_permalink . '">' . $team . '</a>';
-	}
-	
-	$output .= '<tr> <td>' . $season . '</td> <td>' . $team . '</td> </tr>';
+if ( $format === 'teams' ) {
+	$layout = 'teams';
+	$trophy_data = get_post_meta( $id, 'sp_winners', true );
+	uasort( $trophy_data, 'sp_sort_by_count' );
+}else{
+	$layout = 'seasons';
+	//Get all the winners of the specific trophy
+	$trophy_data = get_post_meta( $id, 'sp_trophies', true );
+	if ( $format === 'asc' )
+		$trophy_data = array_reverse( $trophy_data );
 }
 
-$output .= '</tbody>' . '</table>';
-$output .= '</div>';
-?>
-
-<div class="sp-template sp-template-league-table">
-	<?php echo $output; ?>
-</div>
+sp_get_template( 'trophy-data-' . $layout . '.php', array(
+	'id' => $id,
+	'title' => $title,
+	'show_title' => $show_title,
+	'show_team_logo' => $show_team_logo,
+	'responsive' => $responsive,
+	'sortable' => $sortable,
+	'scrollable' => $scrollable,
+	'paginated' => $paginated,
+	'rows' => $rows,
+	'trophy_data' => $trophy_data,
+) );

@@ -52,7 +52,13 @@ class SP_Meta_Box_Trophy_Statistics {
 		$winners = array();
 		foreach( $winners_perseason as $season_id => $season ) {
 			$teams[] = $season['team_id'];
-			$winners[ $season['team_id'] ][] = $season_id;
+			$winners[ $season['team_id'] ][ $season_id ]['season_name'] = $season['season'];
+			
+			if ( isset( $season['table_id'] ) )
+				$winners[ $season['team_id'] ][ $season_id ]['table_id'] = $season['table_id'];
+			
+			if ( isset( $season['calendar_id'] ) )
+				$winners[ $season['team_id'] ][ $season_id ]['calendar_id'] = $season['calendar_id'];
 		}
 		$teams = array_filter( $teams );
 		$teams = array_unique( $teams );

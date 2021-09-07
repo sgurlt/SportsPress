@@ -191,9 +191,9 @@ class SportsPress_Trophies {
 					'default'	=> 0,
 					'type' 		=> 'radio',
 					'options' => array(
-						0	  => __( 'Seasons list (DESC)', 'sportspress' ),
-						1	  => __( 'Seasons list (ASC)', 'sportspress' ),
-						2	  => __( 'Teams list', 'sportspress' ),
+						'desc'	  => __( 'Seasons list (DESC)', 'sportspress' ),
+						'asc'	  => __( 'Seasons list (ASC)', 'sportspress' ),
+						'teams'	  => __( 'Teams list', 'sportspress' ),
 					),
 				),
 
