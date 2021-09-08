@@ -128,7 +128,8 @@
 	content: "\f140";
 	position: absolute;
 }
-.sp-data-table .data-name {
+.sp-data-table .data-name,
+.sp-data-table .data-winner {
 	text-align: left;
 }
 .sp-data-table .data-number,
@@ -193,6 +194,27 @@
 	margin-right: 0.5em;
 }
 .sp-league-table .team-logo img {
+	width: auto;
+	height: auto;
+	max-width: 2em;
+	max-height: 2em;
+}
+
+/* Trophies */
+.sp-trophy-data td.has-logo {
+	line-height: 2em;
+}
+.sp-trophy-data .team-logo {
+	width: 2em;
+	height: 2em;
+	display: inline-block;
+	vertical-align: middle;
+	text-align: center;
+}
+.sp-trophy-data .data-winner .team-logo {
+	margin-right: 0.5em;
+}
+.sp-trophy-data .team-logo img {
 	width: auto;
 	height: auto;
 	max-width: 2em;

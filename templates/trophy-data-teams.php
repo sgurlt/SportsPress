@@ -17,7 +17,7 @@ if ( $show_title && false === $title && $id )
 
 //Create a unique identifier based on the current time in microseconds
 $identifier = uniqid( 'table_' );
-
+$i = 0;
 $output = '';
 
 if ( $title )
@@ -27,7 +27,7 @@ $output .= '<div class="sp-table-wrapper">';
 
 $output .= '<table class="sp-trophy-data sp-data-table' . ( $sortable ? ' sp-sortable-table' : '' ) . ( $responsive ? ' sp-responsive-table '.$identifier : '' ). ( $scrollable ? ' sp-scrollable-table' : '' ) . ( $paginated ? ' sp-paginated-table' : '' ) . '" data-sp-rows="' . $rows . '">' . '<thead>' . '<tr>';
 
-$output .= '<th>' . __( 'Team', 'sportspress' ) . '</th>';
+$output .= '<th class="data-name">' . __( 'Team', 'sportspress' ) . '</th>';
 $output .= '<th>' . __( 'Seasons', 'sportspress' ) . '</th>';
 
 $output .= '</tr>' . '</thead>' . '<tbody>';
@@ -49,10 +49,12 @@ foreach( $trophy_data as $team_id => $seasons ) {
 		}
 		$winnings[] = $winning;
 	}
+	$name_class = '';
 	if ( $show_team_logo ){
 		if ( has_post_thumbnail( $team_id ) ) {
 			$logo = get_the_post_thumbnail( $team_id, 'sportspress-fit-icon' );
 			$team = '<span class="team-logo">' . $logo . '</span>' . $team;
+			$name_class .= ' has-logo';
 		}
 	}
 	if ( $link_teams ) {
@@ -60,8 +62,10 @@ foreach( $trophy_data as $team_id => $seasons ) {
 		$team = '<a href="' . $team_permalink . '">' . $team . '</a>';
 	}
 	$winnings = implode( ', ', $winnings );
-
-	$output .= '<tr> <td>' . $team . '</td> <td>' . $winnings . '</td> </tr>';
+	
+	$output .= '<tr class="' . ( $i % 2 == 0 ? 'odd' : 'even' ) . ' sp-row-no-' . $i . '">';
+	$output .= '<td class="data-name' . $name_class . '" data-label="' . __( 'Winner', 'sportspress' ) . '">' . $team . '</td> <td>' . $winnings . '</td>';
+	$output .= '</tr>';
 }
 
 $output .= '</tbody>' . '</table>';
