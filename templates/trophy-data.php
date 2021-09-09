@@ -24,6 +24,14 @@ $defaults = array(
 
 extract( $defaults, EXTR_SKIP );
 
+if ( $show_title && false === $title && $id ):
+	$caption = get_post_meta( $id, 'sp_caption', true );
+	if ( $caption )
+		$title = $caption;
+	else
+		$title = get_the_title( $id );
+endif;
+
 $layout = get_option( 'sportspress_trophy_format', 'seasons' );
 $order = get_option( 'sportspress_trophy_order', 'desc' );
 

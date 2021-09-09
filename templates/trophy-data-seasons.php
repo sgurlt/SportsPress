@@ -9,9 +9,6 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-if ( $show_title && false === $title && $id )
-	$title = __( 'Winners of ', 'sportspress' ) . get_the_title( $id );
-
 //Create a unique identifier based on the current time in microseconds
 $identifier = uniqid( 'table_' );
 $i = 0;
