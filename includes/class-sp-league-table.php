@@ -616,6 +616,15 @@ class SP_League_Table extends SP_Secondary_Post {
 
 		$columns = array();
 		$this->priorities = array();
+		$tiebreaker_order = get_option( 'sportspress_table_tiebreaker_order', 'last' );
+		
+		if ( $is_main_loop && 'h2h' == get_option( 'sportspress_table_tiebreaker', 'none' ) && $tiebreaker_order == 'first' ) {
+			$h2h_priority = 0;
+			$this->priorities[ $h2h_priority ] = array(
+				'column' => 'h2h',
+				'order' => 'DESC'
+				);
+		}
 
 		foreach ( $stats as $stat ):
 
@@ -636,11 +645,26 @@ class SP_League_Table extends SP_Secondary_Post {
 					'column' => $stat->post_name,
 					'order' => sp_array_value( sp_array_value( $meta, 'sp_order', array() ), 0, 'DESC' )
 				);
+				if ( $is_main_loop && 'h2h' == get_option( 'sportspress_table_tiebreaker', 'none' ) && $tiebreaker_order == $stat->post_name ) {
+					$h2h_priority = strval( $priority + 0.5 );
+					$this->priorities[ $h2h_priority ] = array(
+						'column' => 'h2h',
+						'order' => 'DESC'
+						);
+				}
 			endif;
 
 		endforeach;
+		
+		if ( $is_main_loop && 'h2h' == get_option( 'sportspress_table_tiebreaker', 'none' ) && $tiebreaker_order == 'last' ) {
+			$h2h_priority = 9999;
+			$this->priorities[ $h2h_priority ] = array(
+				'column' => 'h2h',
+				'order' => 'DESC'
+				);
+		}
 
-		// Sort priorities in descending order
+		// Sort priorities in ascenting order
 		ksort( $this->priorities );
 
 		// Initialize games back column variable
