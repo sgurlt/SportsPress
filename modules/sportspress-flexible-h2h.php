@@ -66,7 +66,7 @@ class SportsPress_Flexible_H2H {
 				$priorities[ $stat->post_name ] = 'After ' . $stat->post_title;
 		}
 		$priorities['last'] = __( 'Last (Default)', 'sportspress' );
-		//var_dump($stats);
+
 		$settings[] = array(
 						'title'     => __( 'Tiebreaker Order', 'sportspress' ),
 						'id' 		=> 'sportspress_table_tiebreaker_order',
