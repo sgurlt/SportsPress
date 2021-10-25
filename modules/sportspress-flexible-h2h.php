@@ -60,7 +60,6 @@ class SportsPress_Flexible_H2H {
 		);
 		$stats = get_posts( $args );
 		$priorities = array();
-		$priorities['first'] = __( 'First', 'sportspress' );
 		foreach ( $stats as $stat ) {
 			$priority_stat = get_post_meta( $stat->ID, 'sp_priority', true );
 			if ( $priority_stat )

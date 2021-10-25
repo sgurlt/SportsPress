@@ -618,14 +618,6 @@ class SP_League_Table extends SP_Secondary_Post {
 		$this->priorities = array();
 		$tiebreaker_order = get_option( 'sportspress_table_tiebreaker_order', 'last' );
 		
-		if ( $is_main_loop && 'h2h' == get_option( 'sportspress_table_tiebreaker', 'none' ) && $tiebreaker_order == 'first' ) {
-			$h2h_priority = 0;
-			$this->priorities[ $h2h_priority ] = array(
-				'column' => 'h2h',
-				'order' => 'DESC'
-				);
-		}
-
 		foreach ( $stats as $stat ):
 
 			// Get post meta
