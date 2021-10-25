@@ -33,9 +33,6 @@ class SP_League_Table extends SP_Secondary_Post {
 	
 	/** @var int Show Scheduled events. */
 	public $show_future_events;
-	
-	/** @bulean Main Loop identify */
-	public $is_main_loop;
 
 	/**
 	 * Returns formatted data
@@ -96,7 +93,7 @@ class SP_League_Table extends SP_Secondary_Post {
 		// Determine if main loop
 		if ( $team_ids ) {
 
-			$this->is_main_loop = false;
+			$is_main_loop = false;
 
 		} else {
 
@@ -136,7 +133,7 @@ class SP_League_Table extends SP_Secondary_Post {
 				$team_ids = (array)get_post_meta( $this->ID, 'sp_team', false );
 			}
 
-			$this->is_main_loop = true;
+			$is_main_loop = true;
 		}
 
 		// Get all leagues populated with stats where available
@@ -325,7 +322,7 @@ class SP_League_Table extends SP_Secondary_Post {
 
 		$args = apply_filters( 'sportspress_table_data_event_args', $args );
 		
-		if ( ! $this->is_main_loop ):
+		if ( ! $is_main_loop ):
 			if ( sizeof( $team_ids ) ):
 				$args['meta_query'][] = array(
 					'key' => 'sp_team',
@@ -348,7 +345,7 @@ class SP_League_Table extends SP_Secondary_Post {
 
 			$teams = (array)get_post_meta( $event->ID, 'sp_team', false );
 			$teams = array_filter( $teams );
-			if ( ! $this->is_main_loop && sizeof( array_diff( $teams, $team_ids ) ) ) continue;
+			if ( ! $is_main_loop && sizeof( array_diff( $teams, $team_ids ) ) ) continue;
 
 			$results = (array)get_post_meta( $event->ID, 'sp_results', true );
 			$minutes = get_post_meta( $event->ID, 'sp_minutes', true );
@@ -621,7 +618,7 @@ class SP_League_Table extends SP_Secondary_Post {
 		$this->priorities = array();
 		$tiebreaker_order = get_option( 'sportspress_table_tiebreaker_order', 'last' );
 		
-		if ( $this->is_main_loop && 'h2h' == get_option( 'sportspress_table_tiebreaker', 'none' ) && $tiebreaker_order == 'first' ) {
+		if ( $is_main_loop && 'h2h' == get_option( 'sportspress_table_tiebreaker', 'none' ) && $tiebreaker_order == 'first' ) {
 			$h2h_priority = 0;
 			$this->priorities[ $h2h_priority ] = array(
 				'column' => 'h2h',
@@ -648,7 +645,7 @@ class SP_League_Table extends SP_Secondary_Post {
 					'column' => $stat->post_name,
 					'order' => sp_array_value( sp_array_value( $meta, 'sp_order', array() ), 0, 'DESC' )
 				);
-				if ( $this->is_main_loop && 'h2h' == get_option( 'sportspress_table_tiebreaker', 'none' ) && $tiebreaker_order == $stat->post_name ) {
+				if ( $is_main_loop && 'h2h' == get_option( 'sportspress_table_tiebreaker', 'none' ) && $tiebreaker_order == $stat->post_name ) {
 					$h2h_priority = strval( $priority + 0.5 );
 					$this->priorities[ $h2h_priority ] = array(
 						'column' => 'h2h',
@@ -659,7 +656,7 @@ class SP_League_Table extends SP_Secondary_Post {
 
 		endforeach;
 		
-		if ( $this->is_main_loop && 'h2h' == get_option( 'sportspress_table_tiebreaker', 'none' ) && $tiebreaker_order == 'last' ) {
+		if ( $is_main_loop && 'h2h' == get_option( 'sportspress_table_tiebreaker', 'none' ) && $tiebreaker_order == 'last' ) {
 			$h2h_priority = 9999;
 			$this->priorities[ $h2h_priority ] = array(
 				'column' => 'h2h',
@@ -796,9 +793,33 @@ class SP_League_Table extends SP_Secondary_Post {
 		}
 
 		// Head to head table sorting
-		if ( $this->is_main_loop && 'h2h' == get_option( 'sportspress_table_tiebreaker', 'none' ) ) {
-			$merged = $this->h2h_sort( $merged );
-			uasort( $merged, array( $this, 'sort' ) );
+		if ( $is_main_loop && 'h2h' == get_option( 'sportspress_table_tiebreaker', 'none' ) ) {
+			$order = array();
+
+			foreach ( $this->tiebreakers as $pos => $teams ) {
+				if ( sizeof( $teams ) === 1 ) {
+					$order[] = reset( $teams );
+				} else {
+					$standings = $this->data( false, $teams );
+					$teams = array_keys( $standings );
+					foreach( $teams as $team ) {
+						$order[] = $team;
+					}
+				}
+			}
+
+			$head_to_head = array();
+			foreach ( $order as $team ) {
+				$head_to_head[ $team ] = sp_array_value( $merged, $team, array() );
+			}
+			$merged = $head_to_head;
+
+			// Recalculate position of teams after head to head
+			$this->pos = 0;
+			$this->counter = 0;
+			foreach ( $merged as $team_id => $team_columns ) {
+				$merged[ $team_id ]['pos'] = $this->calculate_pos( $team_columns, $team_id, false );
+			}
 		}
 
 		// Rearrange the table if Default ordering is not selected
@@ -818,7 +839,7 @@ class SP_League_Table extends SP_Secondary_Post {
 			$data[ $key ] = $tempdata[ $key ];
 		endforeach;
 		
-		if ( ! $this->is_main_loop ):
+		if ( ! $is_main_loop ):
 			return $merged;
 		elseif ( $admin ):
 			$this->add_gb( $placeholders, $w, $l, $gb_column );
@@ -842,20 +863,9 @@ class SP_League_Table extends SP_Secondary_Post {
 	 */
 	public function sort( $a, $b ) {
 
-		// Add the possibility for custom h2h priorities
-		var_dump($this->is_main_loop);
-		if ( ! $this->is_main_loop && 'h2h' == get_option( 'sportspress_table_tiebreaker', 'none' ) ) {
-			$this->priorities = apply_filters( 'sportspress_h2h_priorities', $this->priorities );
-		}
-		
 		// Loop through priorities
 		foreach( $this->priorities as $priority ):
-			
-			// Check if there is a need for tiebreaker function
-			if ( $this->last_priority != $priority['column'] && $priority['column'] == 'h2h' && $this->is_main_loop && 'h2h' == get_option( 'sportspress_table_tiebreaker', 'none' ) ) {
-				return;
-			}
-			$this->last_priority = $priority['column'];
+
 			// Proceed if columns are not equal
 			if ( sp_array_value( $a, $priority['column'], 0 ) != sp_array_value( $b, $priority['column'], 0 ) ):
 
@@ -873,42 +883,6 @@ class SP_League_Table extends SP_Secondary_Post {
 
 		// Default sort by alphabetical
 		return strcmp( sp_array_value( $a, 'name', '' ), sp_array_value( $b, 'name', '' ) );
-	}
-	
-	/**
-	 * Tiebreaker sorting.
-	 *
-	 * @return null
-	 */
-	private function h2h_sort( $merged ) {
-		$order = array();
-
-		foreach ( $this->tiebreakers as $pos => $teams ) {
-			if ( sizeof( $teams ) === 1 ) {
-				$order[] = reset( $teams );
-			} else {
-				$standings = $this->data( false, $teams );
-				$teams = array_keys( $standings );
-				foreach( $teams as $team ) {
-					$order[] = $team;
-				}
-			}
-		}
-
-		$head_to_head = array();
-		foreach ( $order as $team ) {
-			$head_to_head[ $team ] = sp_array_value( $merged, $team, array() );
-		}
-		$merged = $head_to_head;
-
-		// Recalculate position of teams after head to head
-		$this->pos = 0;
-		$this->counter = 0;
-		foreach ( $merged as $team_id => $team_columns ) {
-			$merged[ $team_id ]['pos'] = $this->calculate_pos( $team_columns, $team_id, false );
-		}
-		
-		return $merged;
 	}
 	
 	/**
